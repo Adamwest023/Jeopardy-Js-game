@@ -1,5 +1,6 @@
- const game = document.getElementById('game');
+const game = document.getElementById('game');
 const scoreDisplay = document.getElementById('score');
+let score = 0;
 
 const jeopardyCategories = [
     {
@@ -72,29 +73,29 @@ const jeopardyCategories = [
         genre: "WHAT",
         questions: [
             {
-                question: "What is the color of a polar bears skin ",
+                question: "What is the color of a polar bears skin",
                 answers: ["White", "Black"],
-                correct: 1,
+                correct: "Black",
                 level: "medium"
             }, {
                 question: "What is the commonly used number for Pi",
                 answers: ["3.14", "23"],
-                correct: 0,
+                correct: "3.14",
                 level: "easy"
             }, {
                 question: "What is the base liqour in an old fashioned",
                 answers: ["Vodka", "Whiskey"],
-                correct: 1,
+                correct: "Whiskey",
                 level: "easy"
             }, {
                 question: "What is the fastest car in the world ",
                 answers: ["McLaren Speedtail", "Jesko Absolut"],
-                correct: 1,
+                correct: "Jesko Absolut",
                 level: "hard"
             }, {
                 question: "What is the meaning of life",
                 answers: ["Happiness", "42"],
-                correct: 1,
+                correct: "42",
                 level: "medium"
             },
         ]
@@ -163,6 +164,8 @@ const jeopardyCategories = [
     },
 ]
 
+
+
 function addCategory(category) {
     //creates a column for each category with a div and class
     const column = document.createElement("div");
@@ -177,7 +180,7 @@ function addCategory(category) {
     game.append(column);
 
     //sets the cards to show a value depending on how hard the question is.
-    category.questions.forEach(question => {
+    category.questions.forEach((question) => {
         const card = document.createElement('div');
         card.classList.add('card');
         column.append(card);
@@ -196,7 +199,7 @@ function addCategory(category) {
         card.setAttribute('data-answer-1', question.answers[0]);
         card.setAttribute('data-answer-2', question.answers[1]);
         card.setAttribute('data-correct', question.correct);
-        card.setAttribute('data-value', card.getInnerHTML)
+        card.setAttribute('data-value', card.innerHTML)
 
         //adding an event listener to flip card 
         card.addEventListener('click', flipCard);
@@ -211,24 +214,58 @@ jeopardyCategories.forEach(category => addCategory(category));
 function flipCard() {
     this.innerHTML = "";
     this.style.fontSize = "15px";
-    this.style.lineHeight = "30px"; 
-
-
+    this.style.lineHeight = "30px";
     const textDisplay = document.createElement('div');
-    
-    //add text from the corosponding data
+    //add text from the corrosponding data
     textDisplay.classList.add('card-text');
-    textDisplay.innerHTML = this.getAttribute('data-question');
 
     //create buttons 
-    const button1 = document.createElement('button');
-    const button2 = document.createElement('button');
-    button1.classList.add('button1');
-    button1.innerHTML= this.getAttribute('data-answer-1');
-    button2.classList.add('button2');
-    button2.innerHTML= this.getAttribute('data-answer-2');
-    //add what we created to the div
-    this.append(textDisplay,button1,button2);
+    const firstButton = document.createElement('button');
+    const secondButton = document.createElement('button');
+    firstButton.classList.add('firstButton');
+    secondButton.classList.add('button2');
+    firstButton.innerHTML = this.getAttribute('data-answer-1');
+    secondButton.innerHTML = this.getAttribute('data-answer-2');
+    firstButton.addEventListener('click', getResult)
+    secondButton.addEventListener('click', getResult)
 
+    //add what we created to the div
+    this.append(textDisplay, firstButton, secondButton);
+    textDisplay.innerHTML = this.getAttribute('data-question');
+
+    //remove the ability to click other cards while one is flipped. 
+    const allCards = Array.from(document.querySelectorAll('.card'));
+    allCards.forEach((card) => card.removeEventListener('click', flipCard));
+}
+
+
+function getResult() {
+
+    const allCards = Array.from(document.querySelectorAll('.card'));
+    allCards.forEach((card) => card.addEventListener('click', flipCard));
+
+    const cardOfButton = this.parentElement
+
+    if (cardOfButton.getAttribute('data-correct') == this.innerHTML) {
+        score = score + parseInt(cardOfButton.getAttribute("data-value"));
+        scoreDisplay.innerHTML = score;
+        cardOfButton.classList.add('correct-answer');
+        //will delete everything from card starting bottom to top to clear the card
+        setTimeout(() => {
+            while (cardOfButton.firstChild) {
+                cardOfButton.removeChild(cardOfButton.lastChild)
+            }
+            cardOfButton.innerHTML = cardOfButton.getAttribute('data-value')
+        }, 100);
+    } else {
+        cardOfButton.classList.add('wrong-answer');
+        setTimeout(() => {
+            while (cardOfButton.firstChild) {
+                cardOfButton.removeChild(cardOfButton.lastChild)
+            }
+            cardOfButton.innerHTML = 0
+        }, 100)
+    }
+    cardOfButton.removeEventListener('click', flipCard)
 
 }
