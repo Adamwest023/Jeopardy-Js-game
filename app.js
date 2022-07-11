@@ -1,4 +1,4 @@
-const game = document.getElementById('game');
+ const game = document.getElementById('game');
 const scoreDisplay = document.getElementById('score');
 
 const jeopardyCategories = [
@@ -163,7 +163,7 @@ const jeopardyCategories = [
     },
 ]
 
-function addCategory(category)  {
+function addCategory(category) {
     //creates a column for each category with a div and class
     const column = document.createElement("div");
     column.classList.add('genre-column');
@@ -175,7 +175,60 @@ function addCategory(category)  {
     //adds each to our game variable to populate the html
     column.append(genreTitle)
     game.append(column);
+
+    //sets the cards to show a value depending on how hard the question is.
+    category.questions.forEach(question => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        column.append(card);
+
+        if (question.level === "easy") {
+            card.innerHTML = 100
+        }
+        if (question.level === "medium") {
+            card.innerHTML = 200
+        }
+        if (question.level === "hard") {
+            card.innerHTML = 300
+        }
+        // sets attributes to each card depending on which question is being passed through
+        card.setAttribute('data-question', question.question);
+        card.setAttribute('data-answer-1', question.answers[0]);
+        card.setAttribute('data-answer-2', question.answers[1]);
+        card.setAttribute('data-correct', question.correct);
+        card.setAttribute('data-value', card.getInnerHTML)
+
+        //adding an event listener to flip card 
+        card.addEventListener('click', flipCard);
+
+    })
 }
 
 //loops through our array and creates a category for each 
-jeopardyCategories.forEach(category => addCategory(category))
+jeopardyCategories.forEach(category => addCategory(category));
+
+
+function flipCard() {
+    this.innerHTML = "";
+    this.style.fontSize = "15px";
+    this.style.lineHeight = "30px"; 
+
+
+    const textDisplay = document.createElement('div');
+    
+    //add text from the corosponding data
+    textDisplay.classList.add('card-text');
+    textDisplay.innerHTML = this.getAttribute('data-question');
+
+    //create buttons 
+    const button1 = document.createElement('button');
+    const button2 = document.createElement('button');
+    button1.classList.add('button1');
+    button1.innerHTML= this.getAttribute('data-answer-1');
+    button2.classList.add('button2');
+    button2.innerHTML= this.getAttribute('data-answer-2');
+    //add what we created to the div
+    this.append(textDisplay,button1,button2);
+
+
+}
