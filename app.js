@@ -116,17 +116,17 @@ const jeopardyCategories = [
             }, {
                 question: "When did Dave Matthew Band start",
                 answers: ["1991", "1993"],
-                correct: 0,
+                correct: "1991",
                 level: "hard"
             }, {
                 question: "When was Barak Obama elected as President of the United States",
                 answers: ["2002", "2009"],
-                correct: 1,
+                correct: "2009",
                 level: "medium"
             }, {
                 question: "When is groundhog's day",
                 answers: ["Feb 2", " Feb 12"],
-                correct: 0,
+                correct: "Feb 2",
                 level: "medium"
             },
         ]
@@ -137,27 +137,27 @@ const jeopardyCategories = [
             {
                 question: "What is the highest grossing movie ",
                 answers: ["Avengers Endgame", "Avatar"],
-                correct: 0,
+                correct: "Avengers Endgame",
                 level: "easy"
             }, {
                 question: "What sport is The Undertaker known from",
                 answers: ["Hockey", "Wrestling"],
-                correct: 1,
+                correct: "Wrestling",
                 level: "easy"
             }, {
                 question: "What color pill does Neo take in The Matrix",
                 answers: ["Blue", "Red"],
-                correct: 1,
+                correct: "Red",
                 level: "medium"
             }, {
                 question: "Who ya gonna call",
                 answers: ["Ghostbusters", "The A Team"],
-                correct: 0,
+                correct: "Ghostbusters",
                 level: "easy"
             }, {
                 question: "What was Pixar's first feature movie",
                 answers: ["A Bug's Life", "Toy Story"],
-                correct: 1,
+                correct: "Toy Story",
                 level: "easy"
             },
         ]
